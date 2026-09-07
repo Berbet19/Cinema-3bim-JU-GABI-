@@ -1,6 +1,6 @@
 import {View, Text} from 'react-native';
 
-export default function IndexScreen() {
+export default function CadastroScreen() {
   return (
     <View >
       <Text>OIE</Text>
