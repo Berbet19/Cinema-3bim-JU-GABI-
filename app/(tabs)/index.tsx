@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Text } from 'react-native';
 import Carrossel from '../../components/Carrossel';
+import { FlatGrid } from 'react-native-super-grid';
+import  PhotoGallery from '@/components/grid'
 
 export default function IndexScreen() {
   return (
@@ -11,7 +13,20 @@ export default function IndexScreen() {
        
 
       </ScrollView>
+
+      <PhotoGallery/>
     </View>
+
+    
+
+
+   
+
+
+
+
+
+
   );
 }
 
