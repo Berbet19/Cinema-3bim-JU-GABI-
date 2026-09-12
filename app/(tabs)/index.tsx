@@ -1,21 +1,23 @@
-import {View, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import Carrossel from '../../components/Carrossel';
 
 export default function IndexScreen() {
   return (
-    <View style={styles.center}>
-        <View>
-            
-        </View>
-      
+    <View style={styles.all}>
+      <ScrollView>
+        <Carrossel/>
+
+       
+
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  center: {
+  all: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#000000',
   },
 });
