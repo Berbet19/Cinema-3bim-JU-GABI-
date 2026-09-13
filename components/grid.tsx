@@ -3,13 +3,19 @@ import { StyleSheet, View, Image } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
 import { products } from '@/data/movie'; 
 
-export default function PhotoGallery() {
+interface PhotoGalleryProps {
+  Header: () => React.JSX.Element;
+}
+
+export default function PhotoGallery({ Header }: PhotoGalleryProps) {
   return (
     <FlatGrid
       itemDimension={110}
       data={products}
       spacing={10} 
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.id.toString()}
+      ListHeaderComponent={Header}
+      style={styles.grid} // <-- ADICIONE ISSO AQUI
       renderItem={({ item }) => (
         <View style={styles.itemContainer}>
           <Image 
@@ -24,11 +30,14 @@ export default function PhotoGallery() {
 }
 
 const styles = StyleSheet.create({
+  grid: {
+    flex: 1, // <-- ISSO FORÇA A GRID A APARECER E OCUPAR A TELA
+  },
   itemContainer: {
-    height: 120, //
+    height: 150, 
     borderRadius: 8,
     overflow: 'hidden', 
-    backgroundColor: '#f0f0f0', 
+    backgroundColor: '#1a1a1a', 
   },
   image: {
     width: '100%',

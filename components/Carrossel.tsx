@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ImageBackground, StyleSheet, TouchableOpacity, Text, Animated, } from 'react-native';
+import { View, ImageBackground, StyleSheet, TouchableOpacity, Text, Animated, Dimensions  } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+const { width: LARGURA_TELA } = Dimensions.get('window');
 
 // Array com 5 filmes reais
 const FILMES = [
@@ -59,19 +60,15 @@ const FILMES = [
 
 export default function Carrossel() {
   const navigation = useNavigation<any>();
-  //-------------------------------------------------------------
   const [activeIndex, setActiveIndex] = useState(0);
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
-  // Função para realizar a transição suave (Fade Out -> Troca de Índice -> Fade In)
   const switchSlide = (novoIndice: number) => {
-    //deixa um pouco transparente antes de trocar
     Animated.timing(fadeAnim, {
       toValue: 0.2,
       duration: 200,
       useNativeDriver: false,
     }).start(() => {
-      //quando troca "setActiveIndex". deixa totalmente aparente de novo
       setActiveIndex(novoIndice);
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -80,66 +77,52 @@ export default function Carrossel() {
       }).start();
     });
   };
-  //------------------------------------------------------------
 
-  //------------------------------------------------------------
-  //conta de matematica para deixar "infinito" o carrossel, quando pressionado as setas, nesse caso, da direita
-  //Se você está no filme 0 e avança: (0 + 1) % 5 = 1 (Vai pro filme 2).
-  //Se você está no filme 3 e avança: (3 + 1) % 5 = 4 (Vai pro filme 5).
-  //Se você está no filme 4 e avança: (4 + 1) % 5 = 0 (Volta para o primeiro filme!).
   const avancarSlide = () => {
     const nextIndex = (activeIndex + 1) % FILMES.length;
     switchSlide(nextIndex);
   };
 
-  //código inverso para quando clicar na seta da esquerda
-  const voltarSlide = () => {
+   const voltarSlide = () => {
     const prevIndex = (activeIndex - 1 + FILMES.length) % FILMES.length;
     switchSlide(prevIndex);
   };
 
-  //função das bolinhas em baixo
   const bolinhasInferiores = (index: number) => {
-    //verifica se você não está clicando no filme que já está na tela
     if (index !== activeIndex) {
       switchSlide(index);
     }
   };
-  //---------------------------------------------------------
 
-  //---------------------------------------------------------
-  //o temporizador par avançar os filmes 
   useEffect(() => {
-    // 1. Liga o cronômetro
     const timer = setInterval(() => {
-      avancarSlide(); // Chama a função de passar pro próximo filme
-    }, 3000); // 3000 milissegundos = 3 segundos
-
-    // 2. Desliga o cronômetro (Limpeza)
+      avancarSlide();
+    }, 3000);
     return () => clearInterval(timer);
-  }, [activeIndex]); //Diz ao React: "Rode esse useEffect toda vez que a variável activeIndex mudar de valor".
-  //--------------------------------------------------------
+  }, [activeIndex]);
 
   const filmeAtual = FILMES[activeIndex];
-  //Essa linha diz: "Pegue na lista completa (FILMES) a ficha do filme que corresponde ao número (activeIndex) do slide atual e guarde na variável filmeAtual para colocar na tela".
 
-  {/*--------------------------------------------------------------------------------- */ }
-  return (
-    //conteiner = parte principal, onde define tamanho, bordas etc
+   return (
     <View style={styles.container}>
-
-      {/* é o controle da animação de "aparecer e desaparecer" (o Fade), quando fadeAnim ta em 1, parece tudo, quando ta em 0.2, tudo fica semi-transparente */}
       <Animated.View style={[styles.animatedContainer, { opacity: fadeAnim }]}>
-
-        <ImageBackground //onde fica a imagem do filme, preenche o carrossel todo e é possível colocar botoes e textos por cima, oq seria impossivel com a tag <Image>
-          source={filmeAtual.imagem}
+        <ImageBackground 
+          source={filmeAtual.imagem} 
           style={styles.image}
-
+          resizeMode="cover"
         >
-          {/*view em que apenas da uma cor, escurece um pouco para ser visivel o texto branco por cima da foto */}
           <View style={styles.overlay} />
 
-          {/* view que organiza as infos dos filmes, com position: 'absolute', bottom: 45, left: 80, para deixar estática no msm lugar, n importa o tamanho da imagem de fundo */}
+          {/* Seta da Esquerda */}
+          <TouchableOpacity style={styles.setaEsquerda} onPress={voltarSlide}>
+            <MaterialIcons name="chevron-left" size={40} color="#fff" />
+          </TouchableOpacity>
+
+          {/* Seta da Direita */}
+          <TouchableOpacity style={styles.setaDireita} onPress={avancarSlide}>
+            <MaterialIcons name="chevron-right" size={40} color="#fff" />
+          </TouchableOpacity>
+
           <View style={styles.infoContainer}>
             <Text style={styles.titulo}>{filmeAtual.titulo}</Text>
             <Text style={styles.subtitulo}>{filmeAtual.subtitulo}</Text>
@@ -156,7 +139,6 @@ export default function Carrossel() {
               <Text style={styles.detalhesText}>{filmeAtual.categorias}</Text>
             </View>
 
-            {/*Recorta o texto para ter no máximo 2 linhas. Se for maior que isso, o React Native corta e coloca três pontinhos (...) no final automaticamente. */}
             <Text style={styles.sinopse} numberOfLines={2}>
               {filmeAtual.sinopse}
             </Text>
@@ -172,187 +154,146 @@ export default function Carrossel() {
         </ImageBackground>
       </Animated.View>
 
-      {/* Indicadores em Bolinhas (Dots) */}
       <View style={styles.dotsContainer}>
-        {/*o map varre a lista de filmes e desenha uma bolinha (TouchableOpacity) para cada filme encontrado. Como temos 5 filmes, ele renderiza 5 bolinhas. */}
         {FILMES.map((_, index) => (
           <TouchableOpacity
             key={index}
             style={[
               styles.dot,
-              activeIndex === index ? styles.dotActive : styles.dotInactive, //Se a bolinha for a do filme atual, ela recebe o estilo dotActive (branca e mais comprida). Se não for, recebe dotInactive (menor e semi-transparente).
+              activeIndex === index ? styles.dotActive : styles.dotInactive,
             ]}
-            onPress={() => bolinhasInferiores(index)} //Ao clicar na bolinha, chama a função para ir direto para aquele filme.
+            onPress={() => bolinhasInferiores(index)}
           />
         ))}
       </View>
-
-      {/* Botões de Navegação Lateral */}
-      <TouchableOpacity
-        style={[styles.arrowButton, styles.leftArrow]}
-        onPress={voltarSlide} //onPress={voltarSlide} e onPress={avancarSlide}, conectam os cliques das setas às funções que recalculam o índice do filme.
-        activeOpacity={0.7} //Controla a leve transparência que o botão faz ao ser pressionado pelo usuário.
-      >
-        <MaterialIcons name="keyboard-arrow-left" size={48} color="#fff" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.arrowButton, styles.rightArrow]}
-        onPress={avancarSlide}
-        activeOpacity={0.7}
-      >
-        <MaterialIcons name="keyboard-arrow-right" size={48} color="#fff" />
-      </TouchableOpacity>
-      {/*--------------------------------------------------------------------------------- */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: '95%',
-    height: 480,
+
+    container: {
+      width: LARGURA_TELA - 32,
+      height: (LARGURA_TELA - 32) * 1.0,
     alignSelf: 'center',
-    marginVertical: 20,
-    borderRadius: 24,
-    overflow: 'hidden', //faz com que qualquer coisa colocada dentro dela respeite seu tamanho e bordas     
-    backgroundColor: '#0a0d14',
     position: 'relative',
+    backgroundColor: '#000',
+    marginBottom: 20, 
+    marginTop: 10, // <-- Dá um respiro também no topo da tela se precisar
+    borderRadius: 12, 
+    overflow: 'hidden',
   },
   animatedContainer: {
     width: '100%',
     height: '100%',
   },
-
   image: {
     width: '100%',
     height: '100%',
-    justifyContent: 'flex-end',
   },
-  //oq escurece atras dos textos
   overlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(10, 13, 20, 0.55)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-
+ 
+    setaEsquerda: {
+    position: 'absolute',
+    left: 5,
+    top: '25%',
+    zIndex: 10,
+    padding: 5,
+  },
+setaDireita: {
+    position: 'absolute',
+    right: 5,
+    top: '25%',
+    zIndex: 10,
+    padding: 5,
+  },
   infoContainer: {
     position: 'absolute',
-    left: 80,
-    bottom: 45,
-    maxWidth: 480,
-    zIndex: 5,
+    bottom: 50,
+    left: 20,
+    right: 20,
   },
   titulo: {
-    color: '#7a0505',
-    fontSize: 32,
-    fontWeight: '900',
-    letterSpacing: 1.5,
-    textShadowColor: '#FFFFFF',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 1,
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   subtitulo: {
-    color: '#ffffffa9',
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 10,
+    color: '#ccc',
+    fontSize: 14,
+    marginTop: 2,
   },
-
-  //cinema, duração, faixa etaria, e categoria
   detalhesRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginTop: 6,
   },
   detalhesText: {
-    color: '#CCC',
-    fontSize: 13,
+    color: '#aaa',
+    fontSize: 12,
   },
-
   dotSeparator: {
-    color: '#888',
+    color: '#aaa',
     marginHorizontal: 6,
   },
-  //a caixinha da faixa etaria
   badgeContainer: {
-    backgroundColor: '#EAB308',
+    backgroundColor: '#333',
     paddingHorizontal: 6,
-    paddingVertical: 1,
+    paddingVertical: 2,
     borderRadius: 4,
   },
   badgeText: {
-    color: '#000',
+    color: '#fff',
+    fontSize: 10,
     fontWeight: 'bold',
-    fontSize: 11,
   },
-
   sinopse: {
-    color: '#AAA',
+    color: '#ddd',
     fontSize: 13,
-    marginBottom: 16,
+    marginTop: 8,
     lineHeight: 18,
   },
-
-  //botao ingresso
   botoesRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+    marginTop: 12,
   },
   btnIngressos: {
-    backgroundColor: '#7a0505',
-    paddingHorizontal: 22,
-    paddingVertical: 10,
-    borderRadius: 20,
+    backgroundColor: '#e50914',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
   },
   btnIngressosText: {
-    color: '#FFF',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 14,
   },
-
-  //bolinhas inferiores
   dotsContainer: {
     position: 'absolute',
     bottom: 15,
-    alignSelf: 'center',
     flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
-    zIndex: 5,
   },
   dot: {
     height: 8,
     borderRadius: 4,
+    marginHorizontal: 4,
   },
   dotActive: {
-    width: 22,
-    backgroundColor: '#FFF',
+    width: 18,
+    backgroundColor: '#fff',
   },
   dotInactive: {
     width: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
-  },
-
-  //setas
-  arrowButton: {
-    position: 'absolute',
-    top: '45%',
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  leftArrow: {
-    left: 20,
-  },
-  rightArrow: {
-    right: 20,
   },
 });

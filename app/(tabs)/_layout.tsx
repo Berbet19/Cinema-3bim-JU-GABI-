@@ -1,5 +1,4 @@
-
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -18,57 +17,54 @@ function MeusTabs() {
         tabBarActiveTintColor: '#fff8f8',
         tabBarInactiveTintColor: '#f5f5f5',
         tabBarIndicatorStyle: { backgroundColor: '#7a0505' },
-      tabBarStyle:{
-        backgroundColor: '#7a0505',
-         elevation: 0,       
-      shadowOpacity: 0,     
-      borderBottomWidth: 0,    
-      borderTopWidth: 0,    
-      }
-     
-    
+        tabBarStyle:{
+          backgroundColor: '#7a0505',
+          elevation: 0,       
+          shadowOpacity: 0,     
+          borderBottomWidth: 0,    
+          borderTopWidth: 0,    
+        }
       }}
     >
        <Tab.Screen name="index" component={IndexScreen} options={{ title: 'Home' }} />
        <Tab.Screen name="series" component={SeriesScreen} options={{ title: 'Séries' }} />
-      <Tab.Screen name="cadastro" component={CadastroScreen} options={{ title: 'Cadastro' }} />
-      
-     
-
+       <Tab.Screen name="cadastro" component={CadastroScreen} options={{ title: 'Cadastro' }} />
     </Tab.Navigator>
   );
 }
 
-// 3. Criando o Stack Navigator que vai segurar o Header principal
 const Stack = createStackNavigator();
 
 export default function App() {
+  //  CORRETO: Chamando o hook dentro do componente funcional App
+  const { width } = useWindowDimensions();
+  
+  // O cálculo do tamanho da fonte também entra aqui dentro
+  const dynamicFontSize = width > 400 ? 40 : 28;
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* Passamos o componente de abas dentro de uma tela do Stack */}
         <Stack.Screen 
           name="Home" 
           component={MeusTabs} 
           options={{ 
-            title: 'CINEMANDO', // Título do Header principal
-            headerShadowVisible: false, // Remove a linha/sombra no iOS e Android
+            title: 'CINEMANDO', 
+            headerShadowVisible: false, 
             headerTitleAlign: 'center', 
     
             headerStyle: { 
               backgroundColor: '#000000',
-              elevation: 0, // Remove a sombra no Android para fundir com as abas
-              shadowOpacity: 0, // Remove a sombra no iOS
+              elevation: 0, 
+              shadowOpacity: 0, 
             },
             headerTitleStyle:{
                 alignItems:'center',
                 justifyContent: 'center',
                 letterSpacing: 7,
-                fontSize: 69,
-                fontWeight: 800,
-                fontFamily:   'chewy system-ui',
-                
-
+                fontWeight: '800', // Nota: fontWeight no React Native geralmente aceita strings como '800'
+                fontFamily: 'chewy system-ui',
+                fontSize: dynamicFontSize, // Aplica o tamanho responsivo aqui
             },
             headerTintColor: '#920606',
           }} 

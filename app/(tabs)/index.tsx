@@ -1,32 +1,16 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Carrossel from '../../components/Carrossel';
-import { FlatGrid } from 'react-native-super-grid';
-import  PhotoGallery from '@/components/grid'
+import PhotoGallery from '@/components/grid';
 
 export default function IndexScreen() {
   return (
     <View style={styles.all}>
-      <ScrollView>
-        <Carrossel/>
-
-       
-
-      </ScrollView>
-
-      <PhotoGallery/>
+      
+      {/* Passamos como uma função que retorna o componente */}
+      <PhotoGallery Header={() => <Carrossel />} />
+      
     </View>
-
-    
-
-
-   
-
-
-
-
-
-
   );
 }
 
