@@ -14,7 +14,7 @@ const FILMES = [
     duracao: '2h24',
     categorias: 'Ação, Aventura, Fantasia',
     sinopse: 'Em uma Nova York onde ninguém mais sabe sua verdadeira identidade, Peter Parker enfrenta novos vilões enquanto descobre o real significado de recomeçar.',
-    imagem: require('../assets/images/homem-aranha.png'),
+    imagem: require('../assets/images/fotos_carrossel/homem-aranha.png'),
   },
   {
     id: '2',
@@ -24,7 +24,7 @@ const FILMES = [
     duracao: '2h56',
     categorias: 'Ação, Crime, Drama',
     sinopse: 'Quando um assassino sádico deixa pistas, o Batman investiga o submundo de Gotham.',
-    imagem: require('../assets/images/thebatman.png'),
+    imagem: require('../assets/images/fotos_carrossel/thebatman.png'),
   },
   {
     id: '3',
@@ -34,7 +34,7 @@ const FILMES = [
     duracao: '1h58',
     categorias: 'Fantasia, Drama, Romance',
     sinopse: 'As irmãs da família Owens se reúnem novamente para quebrar de vez a antiga maldição do amor que assombra gerações de mulheres da linhagem.',
-    imagem: require('../assets/images/magiaaseducao.jpg'),
+    imagem: require('../assets/images/fotos_carrossel/magiaaseducao.jpg'),
   },
   {
     id: '4',
@@ -44,7 +44,7 @@ const FILMES = [
     duracao: '2h52',
     categorias: 'Ação, Aventura, Fantasia',
     sinopse: 'Após a Guerra de Troia, o lendário rei Odisseu enfrenta criaturas míticas, deuses e perigos extremos em sua épica jornada de volta para casa.',
-    imagem: require('../assets/images/aodisseia.jpg'),
+    imagem: require('../assets/images/fotos_carrossel/aodisseia.jpg'),
   },
   {
     id: '5',
@@ -54,7 +54,7 @@ const FILMES = [
     duracao: '1h45',
     categorias: 'Suspense, Ação',
     sinopse: 'Buscando superar o luto, duas amigas encaram uma perigosa escalada na Tailândia até que um deslizamento as deixa presas a mais de 900 metros de altura.',
-    imagem: require('../assets/images/aqueda2.jpg'),
+    imagem: require('../assets/images/fotos_carrossel/aqueda2.jpg'),
   },
 ];
 
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#000',
     marginBottom: 20, 
-    marginTop: 10, // <-- Dá um respiro também no topo da tela se precisar
+    marginTop: 10, 
     borderRadius: 12, 
     overflow: 'hidden',
   },

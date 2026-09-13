@@ -8,7 +8,7 @@ export const products = [
     duracao: '2h56',
     categorias: 'Ação, Crime, Drama',
     sinopse: 'Quando um assassino sádico deixa pistas, o Batman investiga o submundo de Gotham.',
-    imagem: require('../assets/images/thebatman.png'),
+    imagem: require('../assets/images/fotosgrid/thebatman.png'),
   },
 
      {
@@ -19,7 +19,7 @@ export const products = [
     duracao: '2h24',
     categorias: 'Ação, Aventura, Fantasia',
     sinopse: 'Em uma Nova York onde ninguém mais sabe sua verdadeira identidade, Peter Parker enfrenta novos vilões enquanto descobre o real significado de recomeçar.',
-    imagem: require('../assets/images/homem-aranha.png'),
+ imagem: require('../assets/images/fotosgrid/thebatman.png'),
   },
   {
     id: '3',
@@ -29,7 +29,7 @@ export const products = [
     duracao: '1h58',
     categorias: 'Fantasia, Drama, Romance',
     sinopse: 'As irmãs da família Owens se reúnem novamente para quebrar de vez a antiga maldição do amor que assombra gerações de mulheres da linhagem.',
-    imagem: require('../assets/images/magiaaseducao.jpg'),
+   imagem: require('../assets/images/fotosgrid/thebatman.png'),
   },
   {
     id: '4',
@@ -39,7 +39,7 @@ export const products = [
     duracao: '2h52',
     categorias: 'Ação, Aventura, Fantasia',
     sinopse: 'Após a Guerra de Troia, o lendário rei Odisseu enfrenta criaturas míticas, deuses e perigos extremos em sua épica jornada de volta para casa.',
-    imagem: require('../assets/images/aodisseia.jpg'),
+   imagem: require('../assets/images/fotosgrid/thebatman.png'),
   },
   {
     id: '5',
@@ -49,6 +49,6 @@ export const products = [
     duracao: '1h45',
     categorias: 'Suspense, Ação',
     sinopse: 'Buscando superar o luto, duas amigas encaram uma perigosa escalada na Tailândia até que um deslizamento as deixa presas a mais de 900 metros de altura.',
-    imagem: require('../assets/images/aqueda2.jpg'),
+   imagem: require('../assets/images/fotosgrid/thebatman.png'),
   },
 ];
